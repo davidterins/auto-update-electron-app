@@ -12,16 +12,46 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
-import { autoUpdater } from 'electron-updater';
+import {
+  // autoUpdater,
+  AppUpdater,
+  NsisUpdater,
+  AppImageUpdater,
+  MacUpdater,
+} from 'electron-updater';
 import log from 'electron-log';
+import { AllPublishOptions } from 'electron-updater/node_modules/builder-util-runtime';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
-export default class AppUpdater {
+export default class Updater {
   constructor() {
     log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
+
+    let updater: AppUpdater;
+
+    const api = '';
+    const GHToken = '';
+
+    const options: AllPublishOptions = {
+      provider: 'generic',
+      url: `${api}/update/${process.platform}/${app.getVersion()}`,
+      requestHeaders: {
+        Authorization: `Bearer ${GHToken}`,
+        accept: 'application/octet-stream',
+      },
+    };
+
+    if (process.platform === 'win32') {
+      updater = new NsisUpdater(options);
+    } else if (process.platform === 'darwin') {
+      updater = new MacUpdater(options);
+    } else {
+      updater = new AppImageUpdater(options);
+    }
+
+    updater.logger = log;
+    updater.checkForUpdatesAndNotify();
   }
 }
 
@@ -112,7 +142,7 @@ const createWindow = async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
+  new Updater();
 };
 
 /**
