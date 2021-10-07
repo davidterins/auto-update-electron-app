@@ -13,7 +13,6 @@ import 'regenerator-runtime/runtime';
 import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import {
-  // autoUpdater,
   AppUpdater,
   NsisUpdater,
   AppImageUpdater,
@@ -24,18 +23,22 @@ import { AllPublishOptions } from 'electron-updater/node_modules/builder-util-ru
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
+let mainWindow: BrowserWindow | null = null;
+const appVersion = app.getVersion();
+
 export default class Updater {
   constructor() {
     log.transports.file.level = 'info';
+    log.log(`Logpath: ${log.transports.file.getFile().path}`);
 
     let updater: AppUpdater;
 
-    const api = '';
+    const apiUrl = 'https://localhost:5004/api';
     const GHToken = '';
 
     const options: AllPublishOptions = {
       provider: 'generic',
-      url: `${api}/update/${process.platform}/${app.getVersion()}`,
+      url: `${apiUrl}/update/${process.platform}/${app.getVersion()}`,
       requestHeaders: {
         Authorization: `Bearer ${GHToken}`,
         accept: 'application/octet-stream',
@@ -51,11 +54,32 @@ export default class Updater {
     }
 
     updater.logger = log;
-    updater.checkForUpdatesAndNotify();
+    updater.addListener('checking-for-update', () => {
+      mainWindow?.setTitle('Checking for update');
+    });
+    updater.addListener('update-available', ({ version }: any) => {
+      mainWindow?.setTitle(`Version: ${version} is available`);
+    });
+    updater.addListener('update-not-available', () => {
+      mainWindow?.setTitle(`${appVersion}: Up to date.`);
+    });
+    updater.addListener('error', (e) => {
+      log.log(`${appVersion}: Update error: ${e}`);
+      mainWindow?.setTitle(
+        `${appVersion}: Update error check logfile: ${
+          log.transports.file.getFile().path
+        }`
+      );
+    });
+    updater.addListener('update-downloaded', () => {
+      mainWindow?.setTitle(
+        `${appVersion}: Update downloaded, Restart to install`
+      );
+    });
+
+    updater.checkForUpdates();
   }
 }
-
-let mainWindow: BrowserWindow | null = null;
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -89,9 +113,9 @@ const installExtensions = async () => {
 };
 
 const createWindow = async () => {
-  if (isDevelopment) {
-    await installExtensions();
-  }
+  // if (isDevelopment) {
+  await installExtensions();
+  // }
 
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
@@ -105,9 +129,12 @@ const createWindow = async () => {
     show: false,
     width: 1024,
     height: 728,
+    title: `AutoUpdateElectronApp v${app.getVersion()}`,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+      enableRemoteModule: true,
     },
   });
 
