@@ -1,8 +1,10 @@
-# Auto Update Electron App
+# Auto Update Electron App (Demo app)
 
-This is a demo app to try out the functionality of [electron-auto-update-api](https://github.com/st-knot-software/electron-auto-update-api) to improve the workflow of auto updates for electron apps. This Electron app uses [electron-updater](https://www.npmjs.com/package/electron-updater) package to handle check out their [documentation](https://www.electron.build/auto-update.html) for more info about how updates are handled on the app/client side.
+This is a demo app to try out the functionality of [electron-auto-update-api](https://github.com/st-knot-software/electron-auto-update-api) to improve the workflow of auto updates for electron apps. This Electron app uses [electron-updater](https://www.npmjs.com/package/electron-updater) package to handle automatic updates, check out their [documentation](https://www.electron.build/auto-update.html) for more info about how updates are handled on the app/client side.
 
-Checkout this blogpost to read more about the api.
+Also checkout this blogpost to read more about the api, and why it could be a good idea to use. 📖
+
+![update flow](.erb/img/update-flow.png)
 
 ## Try it out 🚀
 
@@ -22,13 +24,13 @@ export default class Updater {
     let updater: AppUpdater;
 
     const apiUrl = ''; // Specify the adress to your api.
-    const GHToken = ''; // Specify a github token if using private repository.
+    //const GHToken = ''; // Specify a github token if using private repository.
 
     const options: AllPublishOptions = {
       provider: 'generic',
       url: `${apiUrl}/update/${process.platform}/${app.getVersion()}`,
       requestHeaders: {
-        Authorization: `Bearer ${GHToken}`,
+        //Authorization: `Bearer ${GHToken}`, Specify if using private repository.
         accept: 'application/octet-stream',
       },
     };
@@ -50,7 +52,7 @@ export default class Updater {
 ### 3. Build, install & auto update
 
 1. Run: `npm run package`, this will produce an installer for version 1.0.0 of the app.
-2. Install it, (the name of the installer will depend on current OS, for windows it will be `./release/build/AutoUpdateElectronApp Setup 1.0.0` etc.)
+2. Install it, (the name of the installer will depend on current OS, for windows it will be `./release/build/auto-update-electron-app-win-1.0.0.exe` etc.)
 3. Now there should be a version 1.0.0 installed on your PC looking for updates by requesting your API. Woho!🧨
 
 Now lets build the next version...
@@ -58,8 +60,14 @@ Now lets build the next version...
 1. Go to `./release/app/package.json` and bump up the version to 2.0.0.
 2. Run `npm run package` to produce the newer version of the app.
 3. Create a new release for your Github repository matching the version of your app and name the release v.2.0.0.
-4. Upload release files: `AutoUpdateElectronApp Setup 2.0.0`, `AutoUpdateElectronApp Setup 2.0.0.blockmap` & `latest.yml` for windows, files will be named similiar for each platform. (Note that auto updates for OSX needs to use .zip target and will not need a .blockmap)
+4. Upload release files: `auto-update-electron-app-win-2.0.0.exe`, `auto-update-electron-app-win-2.0.0.exe.blockmap` & `latest.yml` for windows, files will be named similiar for each platform. *(Note that auto updates for OSX needs to use .zip target and will not need a .blockmap)*
 5. Publish the v2.0.0 release.
+
+Time to update the app...
+
+1. Make sure that your API is up and running on URL that provided in your Electron app configuration.
+2. Start the installed version of your app *(should be version 1.0.0)*.
+3. It should now automatically update to version 2.0.0.
 
 ## Notices
 

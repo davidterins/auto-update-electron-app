@@ -34,13 +34,13 @@ export default class Updater {
     let updater: AppUpdater;
 
     const apiUrl = 'https://localhost:5004/api';
-    const GHToken = '';
+    // const GHToken = ''; Specify a github token if using private repository.
 
     const options: AllPublishOptions = {
       provider: 'generic',
       url: `${apiUrl}/update/${process.platform}/${app.getVersion()}`,
       requestHeaders: {
-        Authorization: `Bearer ${GHToken}`,
+        // Authorization: `Bearer ${GHToken}`, Specify a github token if using private repository.
         accept: 'application/octet-stream',
       },
     };
@@ -53,6 +53,7 @@ export default class Updater {
       updater = new AppImageUpdater(options);
     }
 
+    updater.allowDowngrade = true;
     updater.logger = log;
     updater.addListener('checking-for-update', () => {
       mainWindow?.setTitle('Checking for update');
@@ -63,7 +64,7 @@ export default class Updater {
     updater.addListener('update-not-available', () => {
       mainWindow?.setTitle(`${appVersion}: Up to date.`);
     });
-    updater.addListener('error', (e) => {
+    updater.addListener('error', (e: Error) => {
       log.log(`${appVersion}: Update error: ${e}`);
       mainWindow?.setTitle(
         `${appVersion}: Update error check logfile: ${

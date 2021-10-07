@@ -40,6 +40,7 @@
     ],
     "afterSign": ".erb/scripts/notarize.js",
     "mac": {
+      "artifactName": "${name}-osx-${version}.${ext}",
       "target": [
         "dmg", "zip"
       ],
@@ -64,11 +65,13 @@
       ]
     },
     "win": {
+      "artifactName": "${name}-win-${version}.${ext}",
       "target": [
         "nsis"
       ]
     },
     "linux": {
+      "artifactName": "${name}-linux-${version}.${ext}",
       "target": [
         "AppImage"
       ],
