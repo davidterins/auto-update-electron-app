@@ -2,7 +2,7 @@
 
 This is a demo app to try out the functionality of [electron-auto-update-api](https://github.com/st-knot-software/electron-auto-update-api) to improve the workflow of auto updates for electron apps. This Electron app uses [electron-updater](https://www.npmjs.com/package/electron-updater) package to handle automatic updates, check out their [documentation](https://www.electron.build/auto-update.html) for more info about how updates are handled on the app/client side.
 
-Also checkout this blogpost to read more about the api, and why it could be a good idea to use. 📖
+Also checkout this blog post to read more about the api, and why it could be a good idea to use. 📖
 
 ![update flow](.erb/img/update-flow.png)
 
