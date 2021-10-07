@@ -53,7 +53,7 @@ export default class Updater {
 
 1. Run: `npm run package`, this will produce an installer for version 1.0.0 of the app.
 2. Install it, (the name of the installer will depend on current OS, for windows it will be `./release/build/auto-update-electron-app-win-1.0.0.exe` etc.)
-3. Now there should be a version 1.0.0 installed on your PC looking for updates by requesting your API. Woho!🧨
+3. Now there should be a version 1.0.0 installed on your PC looking for updates by requesting your API. Woho! 🧨
 
 Now lets build the next version...
 
