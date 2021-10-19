@@ -1,6 +1,6 @@
 # Auto Update Electron App (Demo app)
 
-This is a demo app to try out the functionality of [electron-auto-update-api](https://github.com/st-knot-software/electron-auto-update-api) to improve the workflow of auto updates for electron apps. This Electron app uses [electron-updater](https://www.npmjs.com/package/electron-updater) package to handle automatic updates, check out their [documentation](https://www.electron.build/auto-update.html) for more info about how updates are handled on the app/client side.
+This is a demo app to try out the functionality of [electron-auto-update-api](https://github.com/davidterins/electron-auto-update-api) to improve the workflow of auto updates for electron apps. This Electron app uses [electron-updater](https://www.npmjs.com/package/electron-updater) package to handle automatic updates, check out their [documentation](https://www.electron.build/auto-update.html) for more info about how updates are handled on the app/client side.
 
 Also checkout this blog post to read more about the api, and why it could be a good idea to use. 📖
 
@@ -11,7 +11,7 @@ Also checkout this blog post to read more about the api, and why it could be a g
 ### 1. Setup & Configure Auto Update API
 
 1. Clone/Fork this repo, whatever suites you. The repo you clone or fork to will host the releases of this demo.
-2. Clone/Fork [electron-auto-update-api](https://github.com/st-knot-software/electron-auto-update-api) & configure it to use the repository created in step 1.
+2. Clone/Fork [electron-auto-update-api](https://github.com/davidterins/electron-auto-update-api) & configure it to use the repository created in step 1.
 
 ### 2. Setup & Configure Electron app to use the API
 
